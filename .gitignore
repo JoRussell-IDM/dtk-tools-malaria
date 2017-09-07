@@ -1,2 +1,3 @@
 *.pyc
 malaria.egg-info/
+.idea/
