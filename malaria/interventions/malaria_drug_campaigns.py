@@ -11,7 +11,7 @@ def add_drug_campaign(cb, campaign_type, drug_code, start_days, coverage=1.0, re
                       trigger_coverage=1.0, snowballs=0, treatment_delay=0, triggered_campaign_delay=0, nodes=[],
                       target_group='Everyone', dosing='', drug_ineligibility_duration=0,
                       node_property_restrictions=[], ind_property_restrictions=[], trigger_condition_list=[],
-                      listening_duration=-1):
+                      listening_duration=-1, adherent_drug_configs=[]):
     """
     Add a drug campaign defined by the parameters to the config builder.
     Note: When using "trigger_condition_list", the first entry of "start_days" is the day that is used to start
@@ -58,6 +58,7 @@ def add_drug_campaign(cb, campaign_type, drug_code, start_days, coverage=1.0, re
     listening for the trigger(s), the campaign happens when the trigger(s) is received.
     :param listening_duration: is the duration for which the listen for the trigger, -1 indicates "indefinitely/forever"
     Format: list of dicts: [{ "NodeProperty1" : "PropertyValue1" }, {'NodeProperty2': "PropertyValue2"}, ...]
+    :param adherent_drug_configs: a list of adherent drug configurations, which are dictionaries
     """
 
     expire_recent_drugs = {}
@@ -77,6 +78,9 @@ def add_drug_campaign(cb, campaign_type, drug_code, start_days, coverage=1.0, re
     if dosing != '':
         for i in range(len(drug_configs)):
             drug_configs[i]['Dosing_Type'] = dosing
+
+    # adding adherent_drug_configs to the total drug configs
+    drug_configs = drug_configs + adherent_drug_configs
 
     # set up events to broadcast when receiving campaign drug
     receiving_drugs_event = {
