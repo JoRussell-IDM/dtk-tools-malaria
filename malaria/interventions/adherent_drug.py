@@ -1,7 +1,7 @@
 from malaria.interventions.malaria_drugs import drug_params
 
 
-def configure_adherent_drug(cb, cost=1, doses=[], dont_allow_duplicates=1, dose_interval=1,
+def configure_adherent_drug(cb, cost=1, doses=[], dose_interval=1,
                             dosing_type="FullTreatmentCourse", adherence_config={}, non_adherence_options=["NEXT_UPDATE"],
                             non_adherence_distribution=[1], max_dose_consideration_duration=40,
                             took_dose_event="Took_Dose"):
@@ -89,7 +89,6 @@ def configure_adherent_drug(cb, cost=1, doses=[], dont_allow_duplicates=1, dose_
     cb.config["parameters"]["Malaria_Drug_Params"][drug] = drug_params[drug]
     adherent_drug = {
             "class": "AdherentDrug",
-            "Dont_Allow_Duplicates": dont_allow_duplicates,
             "Cost_To_Consumer": cost,
             "Doses": doses,
             "Dosing_Type": dosing_type,
