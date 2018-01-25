@@ -57,14 +57,7 @@ def configure_adherent_drug(cb, cost=1, doses=[], dont_allow_duplicates=1, dose_
     :param non_adherence_distribution:  An array of probabilities. There must be one value in this array for each value
             in non_adherence_options. The sum of these values must equal 1.0.
     :param max_dose_consideration_duration: Max_Dose_Consideration_Duration The maximum number of days that an individual will  consider taking the doses of the drug
-    :param ind_property_restrictions: Restricts irs based on list of individual properties in format [{"BitingRisk":"High"}, {"IsCool":"Yes}]
-    :param node_property_restrictions: restricts irs based on list of node properties in format [{"Place":"RURAL"}, {"ByALake":"Yes}]
-    :param triggered_campaign_delay: how many time steps after receiving the trigger will the campaign start.
-    Eligibility of people or nodes for campaign is evaluated on the start day, not the triggered day.
-    :param trigger_condition_list: when not empty,  the start day is the day to start listening for the trigger conditions listed, distributing the spraying
-        when the trigger is heard. This does not distribute the BirthTriggered intervention.
-    :param listening_duration: how long the distributed event will listen for the trigger for, default is -1, which is indefinitely
-    :return: Nothing
+    :return: the configured AdherentDrug class dictionary
     """
     # built-in default so we can run this function by just putting in the config builder.
     if not adherence_config:
