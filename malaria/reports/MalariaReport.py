@@ -106,7 +106,7 @@ class FilteredMalariaReport(BaseReport):
         BaseReport.__init__(self, type)
         self.start_day = start_day
         self.end_day = end_day
-        self.nodes = nodes
+        self.nodes = list(nodes)
         self.description = description
 
     def to_dict(self):

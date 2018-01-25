@@ -1,7 +1,6 @@
 import random
 from dtk.interventions.triggered_campaign_delay_event import triggered_campaign_delay_event
 
-
 positive_broadcast = {
         "class": "BroadcastEvent",
         "Broadcast_Event": "TestedPositive"
@@ -9,7 +8,7 @@ positive_broadcast = {
 
 
 def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target='Everyone', start_day=0,
-                          diagnostic_type='NewDetectionTech', diagnostic_threshold=40, event_name="Diagnostic Survey",
+                          diagnostic_type='TRUE_PARASITE_DENSITY', diagnostic_threshold=40, event_name="Diagnostic Survey",
                           node_cfg={"class": "NodeSetAll"}, positive_diagnosis_configs=[],
                           received_test_event='Received_Test', IP_restrictions=[], NP_restrictions=[],
                           pos_diag_IP_restrictions=[], trigger_condition_list=[], listening_duration=-1, triggered_campaign_delay=0 ):
@@ -23,8 +22,24 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
     :param target: Target demographic. Default is 'Everyone'
     :param start_day: Start day for the outbreak
     :param coverage: probability an individual receives the diagnostic
-    :param diagnostic_type: 
-    :param diagnostic_threshold: sensitivity of diagnostic in parasites per uL
+    :param diagnostic_type:
+        BLOOD_SMEAR
+        PCR
+        PF_HRP2
+        TRUE_PARASITE_DENSITY
+        HAS_FEVER
+    :param diagnostic_threshold :
+        Detection_Threshold becomes a parameter required by all types. The units of the threshold depend on the diagnostic type selected.
+        BLOOD_SMEAR
+            Use the SusceptibilityMalaria::CheckParasiteCountWithTest() (or at least logic) to get a parasite density to check against the threshold
+        PCR
+            Use the ReportUtilitiesMalaria::NASBADensityWithUncertainty() method to calculate a measured parasite density and check against the threshold
+        PF_HRP2
+            Add a new method to get the PfHRP2 value and check against the threshold
+        TRUE_PARASITE_DENSITY
+            Check the true/actual parasite density against the threshold
+        HAS_FEVER
+            Check the person's fever against the threshold
     :param nodes: nodes to target.
     # All nodes: {"class": "NodeSetAll"}.
     # Subset of nodes: {"class": "NodeSetNodeList", "Node_List": list_of_nodeIDs}
@@ -38,8 +53,16 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
     :return: nothing
     """
 
+    # OLD version of DTK, without PfHRP2-enabled MalariaDiagnostic:
+    # diagnostic_type options: Microscopy, NewDetectionTech, Other
+    # intervention_cfg = {
+    #                     "Diagnostic_Type": diagnostic_type,
+    #                     "Detection_Threshold": diagnostic_threshold,
+    #                     "class": "MalariaDiagnostic"
+    #                     }
+
     intervention_cfg = {
-                        "Diagnostic_Type": diagnostic_type, 
+                        "MalariaDiagnostic_Type": diagnostic_type,
                         "Detection_Threshold": diagnostic_threshold, 
                         "class": "MalariaDiagnostic"                                          
                         }
@@ -58,15 +81,12 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
 
     if trigger_condition_list:
         if repetitions > 1 or triggered_campaign_delay > 0:
-            event_to_send_out = random.randrange(100000)
-            for x in range(repetitions): # there is at least one repetition, so it always makes at least 1 triggered event broadcast.
-                # create a trigger for each of the delays.
-                triggered_campaign_delay_event(cb, start_day, node_cfg,
-                                                                             triggered_campaign_delay + x * tsteps_btwn,
-                                                                             trigger_condition_list,
-                                                                             listening_duration, event_to_send_out)
-                trigger_condition_list = [event_to_send_out]
-
+            # create a trigger for each of the delays.
+            trigger_condition_list = [triggered_campaign_delay_event(cb, start_day, nodeIDs=node_cfg,
+                                                                     triggered_campaign_delay=triggered_campaign_delay + x * tsteps_btwn,
+                                                                     trigger_condition_list=trigger_condition_list,
+                                                                     listening_duration=listening_duration,
+                                                                     node_property_restrictions=NP_restrictions) for x in range(repetitions)]
         survey_event = {"class": "CampaignEvent",
                         "Start_Day": start_day,
                         "Event_Name": event_name,
@@ -119,13 +139,12 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
                              "Number_Repetitions": repetitions,
                              "Timesteps_Between_Repetitions": tsteps_btwn,
                              "Demographic_Coverage": coverage,
-                             "Target_Demographic": target,
                              "Intervention_Config": {
                                  "Intervention_List" : [
                                      { "class": "BroadcastEvent",
-                                       "Broadcast_Event": received_test_event },
-                                                           intervention_cfg ] ,
-                                 "class" : "MultiInterventionDistributor" }
+                                     "Broadcast_Event": received_test_event },
+                                      intervention_cfg ] ,
+                                "class" : "MultiInterventionDistributor" }
                              },
                          "Nodeset_Config": node_cfg
                          }
@@ -135,7 +154,8 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
                     "Target_Demographic": "ExplicitAgeRanges",
                     "Target_Age_Min": target['agemin'],
                     "Target_Age_Max": target['agemax'] })
-
+        else :
+            survey_event["Event_Coordinator_Config"].update({
+                    "Target_Demographic": target } ) # default is Everyone
         cb.add_event(survey_event)
-
     return

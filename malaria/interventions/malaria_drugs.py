@@ -4,35 +4,20 @@ def add_drug_campaign(cb, drug_code, start_days, coverage=1.0, repetitions=3, in
     Add a drug campaign defined by the parameters to the config builder.
 
     :param cb: The :py:class:`DTKConfigBuilder <dtk.utils.core.DTKConfigBuilder>` that will receive the drug intervention.
-    :param drug_code: The drug code of the drug regimen
+    :param drug_code: The drug code of the drug regimen (ex.: MDA_AL, MSAT_DP, SMC_SPA)
     :param start_days: List of start days where the drug regimen will be distributed
     :param coverage: Demographic coverage of the distribution
     :param repetitions: Number repetitions
     :param interval: Timesteps between the repetitions
     :return: Nothing
     """
+    print('Warning: using deprecated version of add_drug_campaign.')
+    [campaign_type, drugs] = drug_code.split('_')
 
-    drug_configs = drug_configs_from_code(cb,drug_code)
+    from malaria.interventions.malaria_drug_campaigns import add_drug_campaign as new_campaign
+    new_campaign(cb, campaign_type, drugs, start_days=start_days,
+                 coverage=coverage, repetitions=repetitions, interval=interval)
 
-    for start_day in start_days:
-        drug_event = {
-            "class": "CampaignEvent",
-            "Start_Day": start_day,
-            "Event_Coordinator_Config": {
-                "class": "MultiInterventionEventCoordinator",
-                "Target_Demographic": "Everyone",
-                "Demographic_Coverage": coverage,
-                "Intervention_Configs": drug_configs,
-                "Number_Repetitions": repetitions,
-                "Timesteps_Between_Repetitions": interval
-                }, 
-            "Nodeset_Config": {
-                "class": "NodeSetAll"
-                }
-            }
-
-        cb.add_event(drug_event)
-            
 def drug_configs_from_code(cb,drug_code):
     """
     Add a drug config to the simulation configuration based on its code and add the corresponding AntimalarialDrug intervention to the return dictionary.

@@ -23,6 +23,11 @@ params = {
 
     "Cytokine_Gametocyte_Inactivation": 0.01667,
 
+    "Enable_Immunity_Distribution": 0,
+
+    "Enable_Maternal_Infection_Transmission": 0,
+    "Enable_Maternal_Protection": 0, # for Generic, not Malaria
+    "Enable_Maternal_Antibodies_Transmission": 1,
     "Maternal_Antibodies_Type": "SIMPLE_WANING",
     "Maternal_Antibody_Protection": 0.1327,
     "Maternal_Antibody_Decay_Rate": 0.01,
