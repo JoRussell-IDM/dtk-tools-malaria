@@ -2,7 +2,7 @@ import logging
 import os
 import numpy as np
 import calendar
-from calibtool.analyzers.Helpers import ento_data
+from calibtool.analyzers.Helpers import ento_spatial_data
 
 from calibtool.study_sites.EntomologySpatialCalibSite import EntomologySpatialCalibSite
 import glob
@@ -20,6 +20,7 @@ class update_params:
 class MoineSpatialCalibSite(EntomologySpatialCalibSite):
     metadata = {
         'village': 'Magude',
+        'hf': 'Moine',
         'months': [calendar.month_abbr[i] for i in range(1, 13)],
         'species': ['funestus']
     }
@@ -63,10 +64,10 @@ class MoineSpatialCalibSite(EntomologySpatialCalibSite):
               'Load_Balance_Filename':'Moine_loadbalance_24procs.bin',
             # "Vector_Migration_Filename_Local": os.path.join(geography, prefix + '_vector_migration.bin'),
               'Local_Migration_Filename': 'Moine_migration.bin',
-              'Enable_Local_Migration': 1,
-              'Migration_Pattern': 'SINGLE_ROUND_TRIPS', # human migration
-              'Local_Migration_Roundtrip_Duration': 2, # mean of exponential days-at-destination distribution
-              'Local_Migration_Roundtrip_Probability': 0.95, # fraction that return
+              'Enable_Local_Migration': 0,
+              'Migration_Pattern': 'NO_MIGRATION', # human migration
+              # 'Local_Migration_Roundtrip_Duration': 2, # mean of exponential days-at-destination distribution
+              # 'Local_Migration_Roundtrip_Probability': 0.95, # fraction that return
 
               'MSP1_Merozoite_Kill_Fraction': 0.511735322,
               'Max_Individual_Infections': 3,
@@ -86,9 +87,11 @@ class MoineSpatialCalibSite(EntomologySpatialCalibSite):
         # Load the Parasitology CSV
         dir_path = os.path.dirname(os.path.realpath(__file__))
         reference_csv = os.path.join(dir_path, 'inputs', 'Mozambique_ento_data', 'mosquito_count_by_house_day.csv')
-        reference_data = ento_data(reference_csv, self.metadata)
+        hhs_hfs_csv = os.path.join(dir_path, 'inputs', 'Mozambique_ento_data', 'hh_by_health_facility.csv')
+        hhs_csv = os.path.join(dir_path, 'inputs', 'Mozambique_ento_data', 'census_mda_households.csv')
+        reference_data = ento_spatial_data(reference_csv, hhs_hfs_csv, hhs_csv, self.metadata)
 
         return reference_data
 
     def __init__(self):
-        super(MoineSpatialCalibSite, self).__init__('Magude')
+        super(MoineSpatialCalibSite, self).__init__('Moine')
