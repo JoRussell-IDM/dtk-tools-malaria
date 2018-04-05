@@ -30,3 +30,4 @@ def add_challenge_trial(config_builder, start_day=0):
      }
 
     config_builder.add_event(challenge_event)
+    return {'challenge_start' : start_day}
