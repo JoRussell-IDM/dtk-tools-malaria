@@ -20,6 +20,7 @@ disease_params.update(symptoms.params)
 params = copy.deepcopy(disease_params)
 params["PKPD_Model"] = "CONCENTRATION_VERSUS_TIME"
 params["Malaria_Drug_Params"] = drug_params
+params["Genome_Markers"] = []
 
 set_params_by_species(params, ["arabiensis", "funestus", "gambiae"], "MALARIA_SIM")
 
