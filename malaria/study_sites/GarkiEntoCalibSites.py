@@ -5,6 +5,7 @@ import calendar
 from calibtool.analyzers.Helpers import garki_ento_data
 
 from calibtool.study_sites.EntomologyCalibSite import EntomologyCalibSite
+from calibtool.analyzers.ChannelBySeasonCohortAnalyzer import ChannelBySeasonCohortAnalyzer
 
 logger = logging.getLogger(__name__)
 
@@ -30,3 +31,6 @@ class GarkiEntoCalibSite(EntomologyCalibSite):
         reference_data = garki_ento_data(reference_csv, self.metadata)
 
         return reference_data
+
+    def get_analyzers(self):
+        return [ChannelBySeasonCohortAnalyzer(site=self, seasons=self.metadata['months'])]
