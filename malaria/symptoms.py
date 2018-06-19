@@ -21,8 +21,8 @@ params = {
     "PfHRP2_Boost_Rate": 0.07,
     "PfHRP2_Decay_Rate": 0.172,
 
-    "Report_Detection_Threshold_Blood_Smear_Gametocytes": 0.0,
-    "Report_Detection_Threshold_Blood_Smear_Parasites": 0.0,
+    "Report_Detection_Threshold_Blood_Smear_Gametocytes": 20,
+    "Report_Detection_Threshold_Blood_Smear_Parasites": 20,
     "Report_Detection_Threshold_Fever": 1.0,
     "Report_Detection_Threshold_PCR_Gametocytes": 0.05,
     "Report_Detection_Threshold_PCR_Parasites": 0.05,

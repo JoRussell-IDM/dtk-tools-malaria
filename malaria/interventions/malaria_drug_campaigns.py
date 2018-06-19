@@ -5,20 +5,19 @@ from copy import deepcopy, copy
 import random
 
 
-def add_drug_campaign(cb, campaign_type, drug_code, start_days, coverage=1.0, repetitions=3, interval=60,
+def add_drug_campaign(cb, campaign_type, drug_code='', start_days=[0], coverage=1.0, repetitions=3, interval=60,
                       diagnostic_type='TRUE_PARASITE_DENSITY', diagnostic_threshold=40,
                       fmda_radius='hh', node_selection_type='DISTANCE_ONLY',
                       trigger_coverage=1.0, snowballs=0, treatment_delay=0, triggered_campaign_delay=0, nodes=[],
                       target_group='Everyone', dosing='', drug_ineligibility_duration=0,
                       node_property_restrictions=[], ind_property_restrictions=[], trigger_condition_list=[],
-                      listening_duration=-1):
+                      listening_duration=-1, adherent_drug_configs=[], target_residents_only=1):
     """
     Add a drug campaign defined by the parameters to the config builder.
     Note: When using "trigger_condition_list", the first entry of "start_days" is the day that is used to start
     listening for the trigger(s), if listening_duration is specified, the rest of the days are used to start others d;
      "triggered_campaign_delay" indicates the delay period between receiving the trigger and the first campaign/intervention.
      "listening_duration" is the duration for which the listen for the trigger, -1 indicates "indefinitely/forever".
-
     :param cb: The :py:class:`DTKConfigBuilder <dtk.utils.core.DTKConfigBuilder>` that will receive the drug
     intervention.
     :param campaign_type: type of drug campaign (MDA, MSAT, SMC, fMDA, rfMSAT, or rfMDA)
@@ -58,6 +57,7 @@ def add_drug_campaign(cb, campaign_type, drug_code, start_days, coverage=1.0, re
     listening for the trigger(s), the campaign happens when the trigger(s) is received.
     :param listening_duration: is the duration for which the listen for the trigger, -1 indicates "indefinitely/forever"
     Format: list of dicts: [{ "NodeProperty1" : "PropertyValue1" }, {'NodeProperty2': "PropertyValue2"}, ...]
+    :param adherent_drug_configs: a list of adherent drug configurations, which are dictionaries (from configure_adherent_drug)
     """
 
     expire_recent_drugs = {}
@@ -69,22 +69,26 @@ def add_drug_campaign(cb, campaign_type, drug_code, start_days, coverage=1.0, re
                                "Maximum_Duration": 0,
                                'Revert': drug_ineligibility_duration
                                }
-
-    # set up intervention drug block
-    drug_configs = drug_configs_from_code(cb, drug_code)
-
-    # update drug dosing if requested
-    if dosing != '':
-        for i in range(len(drug_configs)):
-            drug_configs[i]['Dosing_Type'] = dosing
-
     # set up events to broadcast when receiving campaign drug
     receiving_drugs_event = {
         "class": "BroadcastEvent",
         "Broadcast_Event": "Received_Campaign_Drugs"
     }
-    if 'Vehicle' in drug_code:  # if distributing Vehicle drug
-        receiving_drugs_event["Broadcast_Event"] = "Received_Vehicle"
+
+    drug_code_drug_configs = []
+    if drug_code:
+        # set up intervention drug block
+        drug_code_drug_configs = drug_configs_from_code(cb, drug_code)
+        # update drug dosing if requested
+        if dosing:
+            for i in range(len(drug_code_drug_configs)):
+                drug_code_drug_configs[i]['Dosing_Type'] = dosing
+            if 'Vehicle' in drug_code:  # if distributing Vehicle drug
+                receiving_drugs_event["Broadcast_Event"] = "Received_Vehicle"
+
+    # adding adherent_drug_configs to the total drug configs
+    drug_configs = drug_code_drug_configs + adherent_drug_configs
+
     if campaign_type[0] == 'r':  # if reactive campaign
         receiving_drugs_event['Broadcast_Event'] = 'Received_RCD_Drugs'
 
@@ -97,7 +101,7 @@ def add_drug_campaign(cb, campaign_type, drug_code, start_days, coverage=1.0, re
     if campaign_type == 'MDA' or campaign_type == 'SMC':
         add_MDA(cb, start_days, coverage, drug_configs, receiving_drugs_event, repetitions, interval, node_cfg,
                 expire_recent_drugs, node_property_restrictions, ind_property_restrictions, target_group,
-                trigger_condition_list, listening_duration, triggered_campaign_delay)
+                trigger_condition_list, listening_duration, triggered_campaign_delay, target_residents_only)
 
     elif campaign_type == 'MSAT' or campaign_type == 'MTAT':
         add_MSAT(cb, start_days, coverage, drug_configs, receiving_drugs_event, repetitions, interval,
@@ -139,7 +143,7 @@ def add_drug_campaign(cb, campaign_type, drug_code, start_days, coverage=1.0, re
 
 def add_MDA(cb, start_days, coverage, drug_configs, receiving_drugs_event, repetitions, interval,
             nodes, expire_recent_drugs, node_property_restrictions, ind_property_restrictions, target_group,
-            trigger_condition_list=[], listening_duration=-1, triggered_campaign_delay=0):
+            trigger_condition_list=[], listening_duration=-1, triggered_campaign_delay=0, target_residents_only=1):
 
     interventions = drug_configs + [receiving_drugs_event]
 
@@ -173,7 +177,7 @@ def add_MDA(cb, start_days, coverage, drug_configs, receiving_drugs_event, repet
                     "Demographic_Coverage": coverage,
                     "Trigger_Condition_List": trigger_condition_list,
                     "Duration": listening_duration,
-                    "Target_Residents_Only": 1,
+                    "Target_Residents_Only": target_residents_only,
                     "Actual_IndividualIntervention_Config": {
                         "class": "MultiInterventionDistributor",
                         "Intervention_List": interventions
