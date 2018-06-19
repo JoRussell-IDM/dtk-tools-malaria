@@ -1,0 +1,192 @@
+{
+    "Defaults": {
+        "IndividualProperties": [
+            {
+                "Initial_Distribution": [
+                    1,
+                    0
+                ],
+                "Property": "DrugStatus",
+                "Transitions": [],
+                "Values": [
+                    "None",
+                    "RecentDrug"
+                ]
+            },
+            {
+                "Initial_Distribution": [
+                    1,
+                    0
+                ],
+                "Property": "ForestGoing",
+                "Transitions": [],
+                "Values": [
+                    "HatesForest",
+                    "LovesForest"
+                ]
+            },
+            {
+                "Initial_Distribution": [
+                    1,
+                    0,
+                    0
+                ],
+                "Property": "HomeVillage",
+                "Transitions": [],
+                "Values": [
+                    "Village1",
+                    "Village2",
+                    "Forest"
+                ]
+            }
+        ]
+    },
+    "Metadata": {
+        "Author": "idm",
+        "DateCreated": "2017-07-19 17:22:09.228000",
+        "IdReference": "Gridded world grump30arcsec",
+        "NodeCount": 3,
+        "Resolution": 30,
+        "Tool": "dtk-tools"
+    },
+    "NodeProperties": [
+        {
+            "Initial_Distribution": [
+                1,
+                0
+            ],
+            "Property": "NodeType",
+            "Values": [
+                "Village",
+                "Forest"
+            ]
+        }
+    ],
+    "Nodes": [
+        {
+            "IndividualProperties": [
+                {
+                    "Initial_Distribution": [
+                        1.0,
+                        0.0
+                    ],
+                    "Property": "DrugStatus",
+                    "Values": [
+                        "None",
+                        "RecentDrug"
+                    ]
+                },
+                {
+                    "Initial_Distribution": [
+                        1.0,
+                        0.0
+                    ],
+                    "Property": "ForestGoing",
+                    "Values": [
+                        "LovesForest",
+                        "HatesForest"
+                    ]
+                },
+                {
+                    "Initial_Distribution": [
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Property": "HomeVillage",
+                    "Values": [
+                        "Village1",
+                        "Village2",
+                        "Forest"
+                    ]
+                }
+            ],
+            "NodeAttributes": {
+                "NodePropertyValues": [
+                    "NodeType:Forest"
+                ]
+            },
+            "NodeID": 3
+        },
+        {
+            "IndividualProperties": [
+                {
+                    "Initial_Distribution": [
+                        1.0,
+                        0.0
+                    ],
+                    "Property": "DrugStatus",
+                    "Values": [
+                        "None",
+                        "RecentDrug"
+                    ]
+                },
+                {
+                    "Initial_Distribution": [
+                        0.0,
+                        1.0
+                    ],
+                    "Property": "ForestGoing",
+                    "Values": [
+                        "LovesForest",
+                        "HatesForest"
+                    ]
+                },
+                {
+                    "Initial_Distribution": [
+                        1.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Property": "HomeVillage",
+                    "Values": [
+                        "Village1",
+                        "Village2",
+                        "Forest"
+                    ]
+                }
+            ],
+            "NodeID": 1
+        },
+        {
+            "IndividualProperties": [
+                {
+                    "Initial_Distribution": [
+                        1.0,
+                        0.0
+                    ],
+                    "Property": "DrugStatus",
+                    "Values": [
+                        "None",
+                        "RecentDrug"
+                    ]
+                },
+                {
+                    "Initial_Distribution": [
+                        0.0,
+                        1.0
+                    ],
+                    "Property": "ForestGoing",
+                    "Values": [
+                        "LovesForest",
+                        "HatesForest"
+                    ]
+                },
+                {
+                    "Initial_Distribution": [
+                        0.0,
+                        1.0,
+                        0.0
+                    ],
+                    "Property": "HomeVillage",
+                    "Values": [
+                        "Village1",
+                        "Village2",
+                        "Forest"
+                    ]
+                }
+            ],
+            "NodeID": 2
+        }
+    ]
+}

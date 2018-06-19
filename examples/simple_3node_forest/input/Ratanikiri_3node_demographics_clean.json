@@ -1,0 +1,123 @@
+{
+    "Defaults": {
+        "IndividualAttributes": {
+            "AgeDistribution1": 0.0001068,
+            "AgeDistribution2": 0,
+            "AgeDistributionFlag": 3,
+            "ImmunityDistribution1": 1,
+            "ImmunityDistribution2": 0,
+            "ImmunityDistributionFlag": 0,
+            "MigrationHeterogeneityDistribution1": 1,
+            "MigrationHeterogeneityDistribution2": 0,
+            "MigrationHeterogeneityDistributionFlag": 0,
+            "MortalityDistribution": {
+                "AxisNames": [
+                    "gender",
+                    "age"
+                ],
+                "AxisScaleFactors": [
+                    1,
+                    365
+                ],
+                "AxisUnits": [
+                    "male=0,female=1",
+                    "years"
+                ],
+                "NumDistributionAxes": 2,
+                "NumPopulationGroups": [
+                    2,
+                    1
+                ],
+                "PopulationGroups": [
+                    [
+                        0,
+                        1
+                    ],
+                    [
+                        0
+                    ]
+                ],
+                "ResultScaleFactor": 2.74e-06,
+                "ResultUnits": "annual deaths per 1000 individuals",
+                "ResultValues": [
+                    [
+                        23
+                    ],
+                    [
+                        23
+                    ]
+                ]
+            },
+            "PrevalenceDistribution1": 0.13,
+            "PrevalenceDistribution2": 0.15,
+            "PrevalenceDistributionFlag": 1,
+            "RiskDistribution1": 1,
+            "RiskDistribution2": 0,
+            "RiskDistributionFlag": 0
+        },
+        "NodeAttributes": {
+            "AbovePoverty": 0.5,
+            "Airport": 0,
+            "Altitude": 0,
+            "InitialPopulation": 1000,
+            "Region": 1,
+            "Seaport": 0,
+            "Urban": 0
+        }
+    },
+    "Metadata": {
+        "Author": "idm",
+        "DateCreated": "2017-07-19 17:22:09.228000",
+        "IdReference": "Gridded world grump30arcsec",
+        "NodeCount": 3,
+        "Resolution": 30,
+        "Tool": "dtk-tools"
+    },
+    "Nodes": [
+        {
+            "NodeAttributes": {
+                "BirthRate": 0.019533099999999998,
+                "InitialPopulation": 310,
+                "LarvalHabitatMultiplier": {
+                    "CONSTANT": 0.31,
+                    "LINEAR_SPLINE": 0,
+                    "TEMPORARY_RAINFALL": 0.31,
+                    "WATER_VEGETATION": 0
+                },
+                "Latitude": 13.7708034515381,
+                "Longitude": 107.104049682617
+            },
+            "NodeID": 1
+        },
+        {
+            "NodeAttributes": {
+                "BirthRate": 0.0170127,
+                "InitialPopulation": 270,
+                "LarvalHabitatMultiplier": {
+                    "CONSTANT": 0.27,
+                    "LINEAR_SPLINE": 0,
+                    "TEMPORARY_RAINFALL": 0.27,
+                    "WATER_VEGETATION": 0
+                },
+                "Latitude": 13.6874704360962,
+                "Longitude": 107.229049682617
+            },
+            "NodeID": 2
+        },
+        {
+            "NodeAttributes": {
+                "BirthRate": 0.0,
+                "InitialPopulation": 0,
+                "LarvalHabitatMultiplier": {
+                    "CONSTANT": 0.25,
+                    "LINEAR_SPLINE": 0,
+                    "TEMPORARY_RAINFALL": 0.25,
+                    "WATER_VEGETATION": 0
+                },
+                "Latitude": 14.2708034515381,
+                "Longitude": 107.270721435547
+            },
+            "NodeID": 3
+        }
+    ]
+}
