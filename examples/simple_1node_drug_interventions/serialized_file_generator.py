@@ -10,10 +10,10 @@ from simtools.SetupParser import SetupParser
 
 if __name__ == "__main__":
 
-    expname = 'Serialized_file_drug_testing_uncorrelated'
+    expname = 'Example_serialized_file_generator'
 
-    sim_duration = 365 * 60
-    num_seeds = 50
+    sim_duration = 365 * 1
+    num_seeds = 1
 
     SetupParser('HPC')
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     set_species_param(cb, "gambiae", "Adult_Life_Expectancy", 20)
     set_species_param(cb, "gambiae", "Indoor_Feeding_Fraction", 0.9)
 
-    cb.update_params({"Demographics_Filenames": ['Calibration/single_node_demographics.json'],
+    cb.update_params({"Demographics_Filenames": ['single_node_demographics.json'],
 
                       'Antigen_Switch_Rate': pow(10, -9.116590124),
                       'Base_Gametocyte_Production_Rate': 0.06150582,
