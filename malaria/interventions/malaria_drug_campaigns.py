@@ -11,7 +11,7 @@ def add_drug_campaign(cb, campaign_type, drug_code='', start_days=[0], coverage=
                       trigger_coverage=1.0, snowballs=0, treatment_delay=0, triggered_campaign_delay=0, nodes=[],
                       target_group='Everyone', dosing='', drug_ineligibility_duration=0,
                       node_property_restrictions=[], ind_property_restrictions=[], trigger_condition_list=[],
-                      listening_duration=-1, adherent_drug_configs=[]):
+                      listening_duration=-1, adherent_drug_configs=[], target_residents_only=1):
     """
     Add a drug campaign defined by the parameters to the config builder.
     Note: When using "trigger_condition_list", the first entry of "start_days" is the day that is used to start
@@ -101,7 +101,7 @@ def add_drug_campaign(cb, campaign_type, drug_code='', start_days=[0], coverage=
     if campaign_type == 'MDA' or campaign_type == 'SMC':
         add_MDA(cb, start_days, coverage, drug_configs, receiving_drugs_event, repetitions, interval, node_cfg,
                 expire_recent_drugs, node_property_restrictions, ind_property_restrictions, target_group,
-                trigger_condition_list, listening_duration, triggered_campaign_delay)
+                trigger_condition_list, listening_duration, triggered_campaign_delay, target_residents_only)
 
     elif campaign_type == 'MSAT' or campaign_type == 'MTAT':
         add_MSAT(cb, start_days, coverage, drug_configs, receiving_drugs_event, repetitions, interval,
@@ -143,7 +143,7 @@ def add_drug_campaign(cb, campaign_type, drug_code='', start_days=[0], coverage=
 
 def add_MDA(cb, start_days, coverage, drug_configs, receiving_drugs_event, repetitions, interval,
             nodes, expire_recent_drugs, node_property_restrictions, ind_property_restrictions, target_group,
-            trigger_condition_list=[], listening_duration=-1, triggered_campaign_delay=0):
+            trigger_condition_list=[], listening_duration=-1, triggered_campaign_delay=0, target_residents_only=1):
 
     interventions = drug_configs + [receiving_drugs_event]
 
@@ -177,7 +177,7 @@ def add_MDA(cb, start_days, coverage, drug_configs, receiving_drugs_event, repet
                     "Demographic_Coverage": coverage,
                     "Trigger_Condition_List": trigger_condition_list,
                     "Duration": listening_duration,
-                    "Target_Residents_Only": 1,
+                    "Target_Residents_Only": target_residents_only,
                     "Actual_IndividualIntervention_Config": {
                         "class": "MultiInterventionDistributor",
                         "Intervention_List": interventions
