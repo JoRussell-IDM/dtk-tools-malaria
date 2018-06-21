@@ -35,7 +35,7 @@ class MalariaReport(BaseEventReportIntervalOutput):
 
 
 default_age_bins = [1.0 / 12, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-                    11, 12, 13, 14, 15, 20, 25, 30, 40, 50, 60, 1000]
+                    11, 12, 13, 14, 15, 20, 25, 30, 40, 50, 60, 125] #1000]
 default_parasitemia_bins = [50.0, 500.0, 5000.0, sys.maxsize]
 default_infection_bins = [20.0, 40.0, 60.0, 80.0, 100.0]
 
