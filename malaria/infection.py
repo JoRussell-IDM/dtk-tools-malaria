@@ -23,7 +23,7 @@ params = {
     'MSP1_Merozoite_Kill_Fraction': 0.43,
     'Falciparum_Nonspecific_Types': 90,
     'Nonspecific_Antigenicity_Factor': 0.42,
-    'Base_Gametocyte_Mosquito_Survival_Rate': 0.002,
+    'Base_Gametocyte_Mosquito_Survival_Rate': 0.00088,
 
     "Number_Of_Asexual_Cycles_Without_Gametocytes": 1,
     "Base_Gametocyte_Fraction_Male": 0.2,
