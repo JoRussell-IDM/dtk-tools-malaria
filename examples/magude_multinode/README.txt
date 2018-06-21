@@ -3,6 +3,7 @@ primarily by Josh Suresh (jsuresh@idmod.org), Caitlin Bever, and Jaline Gerardin
 
 Prereqs:
 Must have dtk-tools, dtk-tools-malaria, malaria-toolbox packages installed.
+(run "python setup.py" or "python setup.py develop" for all 3 packages)
 
 Description:
 Runs the catchment "Magude-Sede-Facazissa" with 1 km^2 gridded pixels from 2 serialized file (for 2 cores),
