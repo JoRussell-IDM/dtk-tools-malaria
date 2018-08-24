@@ -18,6 +18,7 @@ class MalariaReport(BaseEventReportIntervalOutput):
                  infection_bins=[],
                  max_number_reports=15,
                  reporting_interval=73,
+                 ipfilter=None,
                  type=""):
         BaseEventReportIntervalOutput.__init__(self, event_trigger_list, start_day, duration_days,
                                                report_description, nodeset_config, max_number_reports,
@@ -25,12 +26,14 @@ class MalariaReport(BaseEventReportIntervalOutput):
         self.age_bins = age_bins
         self.parasitemia_bins = parasitemia_bins
         self.infection_bins = infection_bins
+        self.ipfilter = ipfilter
 
     def to_dict(self):
         d = super(MalariaReport, self).to_dict()
         d["Age_Bins"] = self.age_bins
         d["Parasitemia_Bins"] = self.parasitemia_bins
         d["Infectiousness_Bins"] = self.infection_bins
+        d["Individual_Property_Filter"] = self.ipfilter
         return d
 
 
@@ -45,7 +48,8 @@ def add_summary_report(cb, start=0, interval=365, nreports=10000,
                        age_bins=default_age_bins,
                        parasitemia_bins=default_parasitemia_bins,
                        infection_bins=default_infection_bins,
-                       nodes={"class": "NodeSetAll"}):
+                       nodes={"class": "NodeSetAll"},
+                       ipfilter=None):
     summary_report = MalariaReport(event_trigger_list=['EveryUpdate'],
                                    start_day=start,
                                    report_description=description,
@@ -54,7 +58,8 @@ def add_summary_report(cb, start=0, interval=365, nreports=10000,
                                    infection_bins=infection_bins,
                                    max_number_reports=nreports,
                                    reporting_interval=interval,
-                                   nodeset_config=nodes)
+                                   nodeset_config=nodes,
+                                   ipfilter=ipfilter)
     summary_report.type = "MalariaSummaryReport"
     cb.add_reports(summary_report)
 
