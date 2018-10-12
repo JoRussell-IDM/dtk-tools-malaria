@@ -26,7 +26,7 @@ def add_vaccine(cb, vaccine_type='RTSS', vaccine_params={}, start_days=[0], cove
             actual_config = {
                 "class": "DelayedIntervention",
                 "Coverage": 1.0,
-                "Delay_Distribution": "CONSTANT_DURATION",
+                "Delay_Distribution": "FIXED_DURATION",
                 "Delay_Period": triggered_delay,
                 "Actual_IndividualIntervention_Configs": interventions
             }
