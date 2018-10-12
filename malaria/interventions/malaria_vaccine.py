@@ -1,42 +1,13 @@
 import copy, math
 
-# Pre-erythrocytic simple vaccine
-preerythrocytic_vaccine = {
-    "class": "SimpleVaccine",
-    "Vaccine_Type": "AcquisitionBlocking",
-    "Vaccine_Take": 1.0,
-    "Reduced_Acquire": 0.9,
-    "Durability_Time_Profile": "DECAYDURABILITY",
-    "Primary_Decay_Time_Constant": 365*5,
-    "Cost_To_Consumer": 15 
-}
-
-# Transmission-blocking sexual-stage vaccine
-sexual_stage_vaccine = copy.deepcopy(preerythrocytic_vaccine)
-sexual_stage_vaccine.update({
-    "Vaccine_Type": "TransmissionBlocking",
-    "Reduced_Transmit": 0.9
-})
-
-# RTS,S simple vaccine
-rtss_simple_vaccine = copy.deepcopy(preerythrocytic_vaccine)
-rtss_simple_vaccine.update({
-    "Reduced_Acquire": 0.8, # 80% initial infection-blocking efficacy
-    "Primary_Decay_Time_Constant": 365*1.125/math.log(2), # 13.5 month half-life
-    "Cost_To_Consumer": 15 # 3 doses * $5/dose
-})
-
-vaccine_dict = { 'RTSS' : rtss_simple_vaccine,
-                 'PEV' : preerythrocytic_vaccine,
-                 'TBV' : sexual_stage_vaccine}
-
 def add_vaccine(cb, vaccine_type='RTSS', vaccine_params={}, start_days=[0], coverage=1.0, repetitions=3, interval=60,
                 nodes=[], target_group='Everyone', node_property_restrictions=[], ind_property_restrictions=[],
-                trigger_condition_list=[], listening_duration=-1, target_residents_only=1):
+                trigger_condition_list=[], triggered_delay=0, listening_duration=-1, target_residents_only=1):
 
     if vaccine_type not in ['RTSS', 'PEV', 'TBV'] :
-        raise ValueError('Requested vaccine type %s has not been specified in malaria.interventions.vaccine')
+        raise ValueError('Requested vaccine type %s has not been specified' % vaccine_type)
 
+    vaccine_dict = load_vaccines()
     vaccine = copy.deepcopy(vaccine_dict[vaccine_type])
 
     if vaccine_params :
@@ -51,6 +22,19 @@ def add_vaccine(cb, vaccine_type='RTSS', vaccine_params={}, start_days=[0], cove
     node_cfg = {'Node_List': nodes, "class": "NodeSetNodeList"} if nodes else {"class": "NodeSetAll"}
 
     if trigger_condition_list:
+        if triggered_delay > 0:
+            actual_config = {
+                "class": "DelayedIntervention",
+                "Coverage": 1.0,
+                "Delay_Distribution": "CONSTANT_DURATION",
+                "Delay_Period": triggered_delay,
+                "Actual_IndividualIntervention_Configs": interventions
+            }
+        else:
+            actual_config = {
+                            "class": "MultiInterventionDistributor",
+                            "Intervention_List": interventions
+                        }
 
         vaccine_event  = {
             "class": "CampaignEvent",
@@ -67,10 +51,7 @@ def add_vaccine(cb, vaccine_type='RTSS', vaccine_params={}, start_days=[0], cove
                     "Trigger_Condition_List": trigger_condition_list,
                     "Duration": listening_duration,
                     "Target_Residents_Only": target_residents_only,
-                    "Actual_IndividualIntervention_Config": {
-                        "class": "MultiInterventionDistributor",
-                        "Intervention_List": interventions
-                    }
+                    "Actual_IndividualIntervention_Config": actual_config
                 }
             }
         }
@@ -113,3 +94,36 @@ def add_vaccine(cb, vaccine_type='RTSS', vaccine_params={}, start_days=[0], cove
                 })
 
             cb.add_event(vaccine_event)
+
+def load_vaccines() :
+    # Pre-erythrocytic simple vaccine
+    preerythrocytic_vaccine = {
+        "class": "SimpleVaccine",
+        "Vaccine_Type": "AcquisitionBlocking",
+        "Vaccine_Take": 1.0,
+        "Reduced_Acquire": 0.9,
+        "Durability_Time_Profile": "DECAYDURABILITY",
+        "Primary_Decay_Time_Constant": 365 * 5,
+        "Cost_To_Consumer": 15
+    }
+
+    # Transmission-blocking sexual-stage vaccine
+    sexual_stage_vaccine = copy.deepcopy(preerythrocytic_vaccine)
+    sexual_stage_vaccine.update({
+        "Vaccine_Type": "TransmissionBlocking",
+        "Reduced_Transmit": 0.9
+    })
+
+    # RTS,S simple vaccine
+    rtss_simple_vaccine = copy.deepcopy(preerythrocytic_vaccine)
+    rtss_simple_vaccine.update({
+        "Reduced_Acquire": 0.8,  # 80% initial infection-blocking efficacy
+        "Primary_Decay_Time_Constant": 365 * 1.125 / math.log(2),  # 13.5 month half-life
+        "Cost_To_Consumer": 15  # 3 doses * $5/dose
+    })
+
+    vaccine_dict = {'RTSS': rtss_simple_vaccine,
+                    'PEV': preerythrocytic_vaccine,
+                    'TBV': sexual_stage_vaccine}
+
+    return vaccine_dict
