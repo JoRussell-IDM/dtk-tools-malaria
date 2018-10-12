@@ -18,7 +18,7 @@ class MalariaReport(BaseEventReportIntervalOutput):
                  infection_bins=[],
                  max_number_reports=15,
                  reporting_interval=73,
-                 ipfilter=None,
+                 ipfilter="",
                  type=""):
         BaseEventReportIntervalOutput.__init__(self, event_trigger_list, start_day, duration_days,
                                                report_description, nodeset_config, max_number_reports,
@@ -49,7 +49,7 @@ def add_summary_report(cb, start=0, interval=365, nreports=10000,
                        parasitemia_bins=default_parasitemia_bins,
                        infection_bins=default_infection_bins,
                        nodes={"class": "NodeSetAll"},
-                       ipfilter=None):
+                       ipfilter=""):
     summary_report = MalariaReport(event_trigger_list=['EveryUpdate'],
                                    start_day=start,
                                    report_description=description,
