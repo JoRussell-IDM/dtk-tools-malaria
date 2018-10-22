@@ -1,4 +1,15 @@
-import copy, math
+import copy, math, collections
+from dtk.utils.Campaign.utils.RawCampaignObject import RawCampaignObject
+
+def flatten(d, parent_key='', sep='_'):
+    items = []
+    for k, v in d.items():
+        new_key = parent_key + sep + k if parent_key else k
+        if isinstance(v, collections.MutableMapping):
+            items.extend(flatten(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
 
 def add_vaccine(cb, vaccine_type='RTSS', vaccine_params={}, start_days=[0], coverage=1.0, repetitions=3, interval=60,
                 nodes=[], target_group='Everyone', node_property_restrictions=[], ind_property_restrictions=[],
@@ -63,7 +74,7 @@ def add_vaccine(cb, vaccine_type='RTSS', vaccine_params={}, start_days=[0], cove
                 "Target_Age_Max": target_group['agemax']
             })
 
-        cb.add_event(vaccine_event)
+        cb.add_event(RawCampaignObject(vaccine_event))
 
     else:
         for start_day in start_days:
@@ -87,13 +98,19 @@ def add_vaccine(cb, vaccine_type='RTSS', vaccine_params={}, start_days=[0], cove
             }
 
             if target_group != 'Everyone':
-                drug_event['Event_Coordinator_Config'].update({
+                vaccine_event['Event_Coordinator_Config'].update({
                     "Target_Demographic": "ExplicitAgeRanges",  # Otherwise default is Everyone
                     "Target_Age_Min": target_group['agemin'],
                     "Target_Age_Max": target_group['agemax']
                 })
 
-            cb.add_event(vaccine_event)
+            cb.add_event(RawCampaignObject(vaccine_event))
+
+    return_params = flatten(vaccine_params, parent_key=vaccine_type)
+
+    return_params.update({"{vaccine}_Coverage".format(vaccine=vaccine_type): coverage})
+
+    return return_params
 
 def load_vaccines() :
     # Pre-erythrocytic simple vaccine
@@ -102,8 +119,10 @@ def load_vaccines() :
         "Vaccine_Type": "AcquisitionBlocking",
         "Vaccine_Take": 1.0,
         "Reduced_Acquire": 0.9,
-        "Durability_Time_Profile": "DECAYDURABILITY",
-        "Primary_Decay_Time_Constant": 365 * 5,
+        "Waning_Config": {
+            "class": "WaningEffectExponential",
+            "Decay_Time_Constant": (365 * 5) /math.log(2)
+        },
         "Cost_To_Consumer": 15
     }
 
@@ -118,7 +137,10 @@ def load_vaccines() :
     rtss_simple_vaccine = copy.deepcopy(preerythrocytic_vaccine)
     rtss_simple_vaccine.update({
         "Reduced_Acquire": 0.8,  # 80% initial infection-blocking efficacy
-        "Primary_Decay_Time_Constant": 365 * 1.125 / math.log(2),  # 13.5 month half-life
+        "Waning_Config": {
+            "class": "WaningEffectExponential",
+            "Decay_Time_Constant": (365 * 1.125) / math.log(2) # 13.5 month half-life
+        },
         "Cost_To_Consumer": 15  # 3 doses * $5/dose
     })
 
