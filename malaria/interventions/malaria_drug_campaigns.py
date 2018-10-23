@@ -1,6 +1,7 @@
 from malaria.interventions.malaria_drugs import drug_configs_from_code
 from malaria.interventions.malaria_diagnostic import add_diagnostic_survey
 from dtk.interventions.triggered_campaign_delay_event import triggered_campaign_delay_event
+from dtk.utils.Campaign.utils.RawCampaignObject import RawCampaignObject
 from copy import deepcopy, copy
 import random
 
@@ -193,7 +194,7 @@ def add_MDA(cb, start_days, coverage, drug_configs, receiving_drugs_event, repet
                 "Target_Age_Max": target_group['agemax']
             })
 
-        cb.add_event(drug_event)
+        cb.add_event(RawCampaignObject(drug_event))
 
     else:
         for start_day in start_days:
@@ -223,7 +224,7 @@ def add_MDA(cb, start_days, coverage, drug_configs, receiving_drugs_event, repet
                     "Target_Age_Max": target_group['agemax']
                 })
 
-            cb.add_event(drug_event)
+            cb.add_event(RawCampaignObject(drug_event))
 
 
 def add_MSAT(cb, start_days, coverage, drug_configs, receiving_drugs_event, repetitions, interval,
@@ -326,7 +327,7 @@ def add_fMDA(cb, start_days, trigger_coverage, coverage, drug_configs, receiving
                                      },
                                  "Nodeset_Config": nodes
                                  }
-        cb.add_event(fmda_distribute_drugs)
+        cb.add_event(RawCampaignObject(fmda_distribute_drugs))
 
     else:
         for start_day in start_days:
@@ -364,7 +365,7 @@ def add_fMDA(cb, start_days, trigger_coverage, coverage, drug_configs, receiving
                                          "Nodeset_Config": nodes
                                          }
 
-                cb.add_event(fmda_distribute_drugs)
+                cb.add_event(RawCampaignObject(fmda_distribute_drugs))
 
 
 def add_rfMSAT(cb, start_day, coverage, drug_configs, receiving_drugs_event, interval, treatment_delay,
@@ -404,7 +405,7 @@ def add_rfMSAT(cb, start_day, coverage, drug_configs, receiving_drugs_event, int
                      },
                  "Nodeset_Config": nodes}
 
-    cb.add_event(rcd_event)
+    cb.add_event(RawCampaignObject(rcd_event))
 
     event_config = drug_configs + [receiving_drugs_event]
     IP_restrictions = []
@@ -501,8 +502,8 @@ def add_rfMDA(cb, start_day, coverage, drug_configs, receiving_drugs_event, inte
                                  },
                              "Nodeset_Config": nodes
                              }
-    cb.add_event(rcd_event)
-    cb.add_event(fmda_distribute_drugs)
+    cb.add_event(RawCampaignObject(rcd_event))
+    cb.add_event(RawCampaignObject(fmda_distribute_drugs))
 
 
 def fmda_cfg(fmda_type, node_selection_type='DISTANCE_ONLY', event_trigger='Give_Drugs'):
