@@ -81,13 +81,13 @@ def add_immunity_report(cb, start=0, interval=365, nreports=10000,
 
 def add_survey_report(cb, survey_days, reporting_interval=21,
                       trigger=["EveryUpdate"], nreports=1,
-                      nodes={"class": "NodeSetAll"}):
+                      nodes={"class": "NodeSetAll"}, description=''):
     survey_reports = [BaseEventReportIntervalOutput(
         event_trigger_list=trigger,
         start_day=survey_day,
         max_number_reports=nreports,
         reporting_interval=reporting_interval,
-        report_description='Day_' + str(survey_day),
+        report_description='%sDay_%d' % (description, survey_day),
         type="MalariaSurveyJSONAnalyzer",
         nodeset_config=nodes) for survey_day in survey_days]
     cb.add_reports(*survey_reports)
