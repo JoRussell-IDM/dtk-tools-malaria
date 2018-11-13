@@ -1,4 +1,5 @@
 import random
+from dtk.utils.Campaign.utils.RawCampaignObject import RawCampaignObject
 from dtk.interventions.triggered_campaign_delay_event import triggered_campaign_delay_event
 
 positive_broadcast = {
@@ -125,7 +126,7 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
                 "Target_Age_Min": target['agemin'],
                 "Target_Age_Max": target['agemax']})
 
-        cb.add_event(survey_event)
+        cb.add_event(RawCampaignObject(survey_event))
 
     else:
         survey_event = { "class" : "CampaignEvent",
@@ -157,5 +158,5 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
         else :
             survey_event["Event_Coordinator_Config"].update({
                     "Target_Demographic": target } ) # default is Everyone
-        cb.add_event(survey_event)
+        cb.add_event(RawCampaignObject(survey_event))
     return

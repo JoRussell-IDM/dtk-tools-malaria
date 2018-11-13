@@ -1,6 +1,7 @@
 import copy, math, collections
 from dtk.utils.Campaign.utils.RawCampaignObject import RawCampaignObject
 
+
 def flatten(d, parent_key='', sep='_'):
     items = []
     for k, v in d.items():
@@ -10,6 +11,7 @@ def flatten(d, parent_key='', sep='_'):
         else:
             items.append((new_key, v))
     return dict(items)
+
 
 def add_vaccine(cb, vaccine_type='RTSS', vaccine_params={}, start_days=[0], coverage=1.0, repetitions=3, interval=60,
                 nodes=[], target_group='Everyone', node_property_restrictions=[], ind_property_restrictions=[],

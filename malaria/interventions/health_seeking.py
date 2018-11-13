@@ -1,3 +1,5 @@
+from dtk.utils.Campaign.utils.RawCampaignObject import RawCampaignObject
+
 expire_recent_drugs = {"class": "PropertyValueChanger",
                        "Target_Property_Key": "DrugStatus",
                        "Target_Property_Value": "RecentDrug",
@@ -102,7 +104,7 @@ def add_health_seeking(config_builder,
                                 "Event_Coordinator_Config": health_seeking_config,
                                 "Nodeset_Config": nodes}
 
-        config_builder.add_event(health_seeking_event)
+        config_builder.add_event(RawCampaignObject(health_seeking_event))
 
 
 def add_health_seeking_by_chw( config_builder,
@@ -169,7 +171,7 @@ def add_health_seeking_by_chw( config_builder,
                  "Event_Coordinator_Config": chw_config,
                  "Nodeset_Config": nodes}
 
-    config_builder.add_event(chw_event)
+    config_builder.add_event(RawCampaignObject(chw_event))
     return
 
 
