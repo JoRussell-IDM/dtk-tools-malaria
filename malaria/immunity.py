@@ -9,12 +9,23 @@ params = {
     "Antibody_CSP_Decay_Days": 90,
     "Antibody_CSP_Killing_Inverse_Width": 1.5,
     "Antibody_CSP_Killing_Threshold": 20,
+    "Antigen_Switch_Rate": pow(10, -9.116590124),
+
+    "Base_Gametocyte_Production_Rate": 0.06150582,
+    "Base_Gametocyte_Mosquito_Survival_Rate": 0.002011099,
 
     "Innate_Immune_Variation_Type": "NONE",
     "Pyrogenic_Threshold": 1.5e4,
+    "Falciparum_MSP_Variants": 32,
+    "Falciparum_Nonspecific_Types": 76,
+    "Falciparum_PfEMP1_Variants": 1070,
     "Fever_IRBC_Kill_Rate": 1.4,
+    "Gametocyte_Stage_Survival_Rate": 0.588569307,
 
     "Max_MSP1_Antibody_Growthrate": 0.045,
+    "MSP1_Merozoite_Kill_Fraction": 0.511735322,
+    "Max_Individual_Infections": 3,
+    "Nonspecific_Antigenicity_Factor": 0.415111634,
     "Antibody_Capacity_Growth_Rate": 0.09,
     "Nonspecific_Antibody_Growth_Rate_Factor": 0.5,  # multiplied by major-epitope number to get rate
     "Antibody_Stimulation_C50": 30,

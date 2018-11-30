@@ -1,3 +1,5 @@
+from dtk.utils.Campaign.utils.RawCampaignObject import RawCampaignObject
+
 def add_challenge_trial(config_builder, start_day=0):
     """
     Add a MalariaChallenge to the passed config_builder with default parameters.
@@ -29,5 +31,5 @@ def add_challenge_trial(config_builder, start_day=0):
          }
      }
 
-    config_builder.add_event(challenge_event)
+    config_builder.add_event(RawCampaignObject(challenge_event))
     return {'challenge_start' : start_day}

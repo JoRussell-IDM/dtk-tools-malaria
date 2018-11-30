@@ -1,4 +1,5 @@
 import random
+from dtk.utils.Campaign.utils.RawCampaignObject import RawCampaignObject
 from dtk.interventions.triggered_campaign_delay_event import triggered_campaign_delay_event
 
 positive_broadcast = {
@@ -7,11 +8,17 @@ positive_broadcast = {
         }
 
 
+negative_broadcast = {
+        "class": "BroadcastEvent",
+        "Broadcast_Event": "TestedNegative"
+        }
+
 def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target='Everyone', start_day=0,
                           diagnostic_type='TRUE_PARASITE_DENSITY', diagnostic_threshold=40, event_name="Diagnostic Survey",
-                          node_cfg={"class": "NodeSetAll"}, positive_diagnosis_configs=[],
+                          node_cfg={"class": "NodeSetAll"}, positive_diagnosis_configs=[], negative_diagnosis_configs=[],
                           received_test_event='Received_Test', IP_restrictions=[], NP_restrictions=[],
-                          pos_diag_IP_restrictions=[], trigger_condition_list=[], listening_duration=-1, triggered_campaign_delay=0 ):
+                          pos_diag_IP_restrictions=[], neg_diag_IP_restrictions=[], trigger_condition_list=[],
+                          listening_duration=-1, triggered_campaign_delay=0 ):
     """
     Function to add recurring prevalence surveys with configurable diagnostic
     When using "trigger_condition_list", the diagnostic is triggered by the words listed
@@ -67,17 +74,20 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
                         "class": "MalariaDiagnostic"                                          
                         }
 
-    if not positive_diagnosis_configs :
-        intervention_cfg["Event_Or_Config"] = "Event"
-        intervention_cfg["Positive_Diagnosis_Event"] = "TestedPositive"    
-    else :
-        intervention_cfg["Event_Or_Config"] = "Config"
-        intervention_cfg["Positive_Diagnosis_Config"] = { 
-            "Intervention_List" : positive_diagnosis_configs + [positive_broadcast] ,
-            "class" : "MultiInterventionDistributor" 
-            }
-        if pos_diag_IP_restrictions :
-            intervention_cfg["Positive_Diagnosis_Config"]["Property_Restrictions_Within_Node"] = pos_diag_IP_restrictions
+    intervention_cfg["Event_Or_Config"] = "Config"
+    intervention_cfg["Positive_Diagnosis_Config"] = {
+        "Intervention_List": positive_diagnosis_configs + [positive_broadcast],
+        "class": "MultiInterventionDistributor"
+    }
+    if pos_diag_IP_restrictions:
+        intervention_cfg["Positive_Diagnosis_Config"]["Property_Restrictions_Within_Node"] = pos_diag_IP_restrictions
+
+    intervention_cfg["Negative_Diagnosis_Config"] = {
+        "Intervention_List" : negative_diagnosis_configs + [negative_broadcast] ,
+        "class" : "MultiInterventionDistributor"
+        }
+    if neg_diag_IP_restrictions :
+        intervention_cfg["Negative_Diagnosis_Config"]["Property_Restrictions_Within_Node"] =neg_diag_IP_restrictions
 
     if trigger_condition_list:
         if repetitions > 1 or triggered_campaign_delay > 0:
@@ -125,7 +135,7 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
                 "Target_Age_Min": target['agemin'],
                 "Target_Age_Max": target['agemax']})
 
-        cb.add_event(survey_event)
+        cb.add_event(RawCampaignObject(survey_event))
 
     else:
         survey_event = { "class" : "CampaignEvent",
@@ -157,5 +167,5 @@ def add_diagnostic_survey(cb, coverage=1, repetitions=1, tsteps_btwn=365, target
         else :
             survey_event["Event_Coordinator_Config"].update({
                     "Target_Demographic": target } ) # default is Everyone
-        cb.add_event(survey_event)
+        cb.add_event(RawCampaignObject(survey_event))
     return

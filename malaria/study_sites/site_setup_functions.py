@@ -31,18 +31,23 @@ class config_setup_fn:
 
 # reporters
 class summary_report_fn:
-    def __init__(self, start=1, interval=365, nreports=2000, age_bins=[1000], description='Annual_Report', nodes=None):
+    def __init__(self, start=1, interval=365, nreports=2000, age_bins=[1000], parasitemia_bins=[0, 50, 500, 5000, 5000000], infection_bins=[0, 5, 20, 50, 80, 100], description='Annual_Report', nodes=None, ipfilter=None):
         self.start = start
         self.interval = interval
         self.nreports = nreports
         self.age_bins = age_bins or [1000]
+        self.parasitemia_bins = parasitemia_bins
+        self.infection_bins = infection_bins
         self.description = description
         self.nodes = nodes or {"class": "NodeSetAll"}
+        self.ip_filter = ipfilter
 
     def __call__(self, cb):
         from malaria.reports.MalariaReport import add_summary_report
         return add_summary_report(cb, start=self.start, interval=self.interval, nreports=self.nreports,
-                                  description=self.description, age_bins=self.age_bins, nodes=self.nodes)
+                                  description=self.description, age_bins=self.age_bins,
+                                  parasitemia_bins=self.parasitemia_bins, infection_bins=self.infection_bins,
+                                  nodes=self.nodes, ipfilter=self.ip_filter)
 
 
 class vector_stats_report_fn:
