@@ -1,7 +1,6 @@
 params = {
     "Infection_Updates_Per_Timestep": 8, ###
     "Enable_Superinfection": 1,
-    "Max_Individual_Infections": 3, ###
 
     "Mean_Sporozoites_Per_Bite": 11,
     "Base_Sporozoite_Survival_Fraction": 0.25,
@@ -15,15 +14,28 @@ params = {
 
     # 150305 calibration by JG to Burkina data + 6 of Kevin's sites
     # N.B: severe disease re-calibration not done
-    'Base_Gametocyte_Production_Rate': 0.044,
-    "Gametocyte_Stage_Survival_Rate": 0.82,
-    'Antigen_Switch_Rate': 2.96e-9,
-    'Falciparum_PfEMP1_Variants': 1112,
-    'Falciparum_MSP_Variants': 7,
-    'MSP1_Merozoite_Kill_Fraction': 0.43,
-    'Falciparum_Nonspecific_Types': 90,
-    'Nonspecific_Antigenicity_Factor': 0.42,
-    'Base_Gametocyte_Mosquito_Survival_Rate': 0.00088,
+    # 'Base_Gametocyte_Production_Rate': 0.044,
+    # "Gametocyte_Stage_Survival_Rate": 0.82,
+    # 'Antigen_Switch_Rate': 2.96e-9,
+    # 'Falciparum_PfEMP1_Variants': 1112,
+    # 'Falciparum_MSP_Variants': 7,
+    # 'MSP1_Merozoite_Kill_Fraction': 0.43,
+    # 'Falciparum_Nonspecific_Types': 90,
+    # 'Nonspecific_Antigenicity_Factor': 0.42,
+    # 'Base_Gametocyte_Mosquito_Survival_Rate': 0.00088,
+    # "Max_Individual_Infections": 5,
+
+    #180824 Prashanth parameters [description?]
+    'Antigen_Switch_Rate': pow(10, -9.116590124),
+    'Base_Gametocyte_Production_Rate': 0.06150582,
+    'Base_Gametocyte_Mosquito_Survival_Rate': 0.002011099,
+    'Falciparum_MSP_Variants': 32,
+    'Falciparum_Nonspecific_Types': 76,
+    'Falciparum_PfEMP1_Variants': 1070,
+    'Gametocyte_Stage_Survival_Rate': 0.588569307,
+    'MSP1_Merozoite_Kill_Fraction': 0.511735322,
+    'Max_Individual_Infections': 3,
+    'Nonspecific_Antigenicity_Factor': 0.415111634,
 
     "Number_Of_Asexual_Cycles_Without_Gametocytes": 1,
     "Base_Gametocyte_Fraction_Male": 0.2,

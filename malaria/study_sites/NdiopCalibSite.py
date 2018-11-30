@@ -1,7 +1,8 @@
 import logging
 
-from calibtool.study_sites.IncidenceCalibSite import IncidenceCalibSite
-from calibtool.study_sites.site_setup_functions import config_setup_fn, summary_report_fn, site_input_eir_fn, add_treatment_fn
+from malaria.study_sites.IncidenceCalibSite import IncidenceCalibSite
+from malaria.study_sites.site_setup_functions import config_setup_fn, summary_report_fn, site_input_eir_fn, \
+    add_treatment_fn
 
 logger = logging.getLogger(__name__)
 
