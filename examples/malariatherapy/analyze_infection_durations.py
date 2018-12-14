@@ -51,7 +51,8 @@ class DurationsAnalyzer(BaseAnalyzer):
             ax.set_ylim([0,0.01])
             ax.annotate("Mean = %s" %np.mean(simulation_durations),xy = (250,0.009),size= 'large')
             ax.annotate(f"ScaleFactor = {sf}", xy=(250, 0.008), size='large')
-
+            ax.set_xlabel('Infection Duration (days)')
+            ax.set_ylabel('Frequency')
             plt.savefig(os.path.join(os.path.expanduser('~'), 'Dropbox (IDM)',
                                    'Malaria Team Folder', 'projects',
                                    'updated_infection_and_immunity', 'malaria-two-pt-oh', 'figures','infection_durations', f"{sim_id}_{sf}_{seed}.eps"))
